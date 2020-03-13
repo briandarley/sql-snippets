@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Conver To SQL From Json</Title>
+                        <Shortcut></Shortcut>
+			<Description>Conver To SQL From Json</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+<Declarations>
+                                
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+--ALTER DATABASE ITS_WSAPP_MASSMAIL SET COMPATIBILITY_LEVEL = 130
+DECLARE @json NVARCHAR(MAX)
+
+SET @json = 
+N'[
+	  {
+		"primarySmtpAddress": "wjiang@email.unc.edu",
+		"alias": "wjiang"
+	  },
+	  {
+		"primarySmtpAddress": "diana.lee@unc.edu",
+		"alias": "dalee"
+	  }
+  ]
+'
+SELECT *
+into #tmp
+FROM OPENJSON(@json)
+WITH (   
+    primarySmtpAddress   varchar(200) '$$.primarySmtpAddress' ,  
+    alias     varchar(20)     '$$.alias'
+) 
+
+
+
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

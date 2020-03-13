@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Mass Mail Statistics</Title>
+                        <Shortcut></Shortcut>
+			<Description>Mass Mail Statistics</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+<Declarations>
+                                <Literal>
+                                	<ID>messageId</ID>
+                                	<ToolTip>Message Id</ToolTip>
+                                	<Default></Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+--Reviewers Kerrenda Crandol, Lori Saddler, Bob Blanchard, Jane Calloway, Kate Hash		
+use ITS_WSAPP_MASSMAIL
+go
+declare @messageId int;
+set @messageId  = 4412;
+
+ 
+  select * from Requests
+  where usermessageid = @messageId;
+  -- Priority = 'Informational'
+  -- SponsoringOrganization = 'Biomedical Research Imaging Center'
+
+  SELECT * 
+  FROM [ITS_WSAPP_MASSMAIL].[dbo].[MessageStatus] ms with(nolock)
+  join requests r on r.GuidMessageId = ms.GuidMessageId
+  where r.UserMessageId = @messageId;
+  --LastAction = 'SentStudentsAndEmployees'
+
+
+  select count(*) from Recipients with(nolock)
+  where MessageId = @messageId
+  --Note, if the mass mail was sent out as informational it will not be sent to 
+  --users with massmail flag = 'N'
+  -- LDAPFilter = "(&(objectclass=UNCPerson)(edupersonaffiliation=student)(massemailallowed=Y))";
+  --9117 Recipients
+
+  select top 10 * from Recipients with(nolock)
+  where MessageId = @messageId
+
+select top 10 * from SendingCriteria sc with(nolock)  
+join requests r on r.GuidMessageId = sc.GuidMessageId
+  where r.UserMessageId = @messageId;
+  
+
+
+-- select * from MessageAction m
+--   join requests r on r.GuidMessageId = m.GuidMessageId
+--   where r.UserMessageId = @messageId
+--   order by m.ExecutionDate asc;
+
+
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

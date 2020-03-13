@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Alias Management - Enable User To Add To Alias</Title>
+                        <Shortcut></Shortcut>
+			<Description>Alias Management - Enable User To Add To Alias</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+<Declarations>
+			<Literal>
+				<ID>onyen</ID>
+				<ToolTip>Onyen Of User</ToolTip>
+				<Default>userOnyen</Default>
+			</Literal>
+		</Declarations>
+			<Code Language="SQL"><![CDATA[
+use ITS_WSAPP_WINTOOLS
+go
+
+ insert into ITS_WSAPP_WINTOOLS..WINTOOLS_AliasManagement
+  (aliasadmin, aliasdomain)
+select '$onyen$', * from 
+(
+	VALUES 
+	('aux-services.unc.edu'), 
+	('dining.unc.edu'), 
+	('ehs.unc.edu'), 
+	('energy.unc.edu'),
+	('fa.unc.edu'),
+	('fac.unc.edu'),
+	('printing.unc.edu'),
+	('store.unc.edu')
+
+)  x(a)
+
+
+
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

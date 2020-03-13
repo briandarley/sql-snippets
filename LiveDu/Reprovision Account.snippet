@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Reprovision Office 365 Account</Title>
+                        <Shortcut></Shortcut>
+			<Description>Reprovision Account.</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+                                <Literal>
+                                	<ID>onyen</ID>
+                                	<ToolTip>Onyen Of User</ToolTip>
+                                	<Default></Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+
+/*
+Reprovision Office 365 Accounts that have been deactivated. 
+*/
+
+select *  FROM ITS_WSAPP_LIVEDU.dbo.LIVEDU_ProvisioningJobs (nolock)  where onyen = '$onyen$'; 
+
+
+--remedy 3619210
+update [ITS_WSAPP_LIVEDU].[dbo].[LIVEDU_ProvisioningJobs] set onyen = concat(onyen, '-stop') where onyen = '$onyen$'; 
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

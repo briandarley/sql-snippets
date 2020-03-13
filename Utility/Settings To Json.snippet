@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Settings To Json</Title>
+                        <Shortcut></Shortcut>
+			<Description>Convert App Settings to Json.</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+                                <Literal>
+                                	<ID>RoleName</ID>
+                                	<ToolTip>Name of the database role</ToolTip>
+                                	<Default>RoleName</Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+--Go To https://jsonformatter.org/json-pretty-print to make it 'Pretty'
+select '[' + STUFF((
+        select 
+            ',{"name":"' + SettingName + '"'
+            + ',"value":"' + replace(REPLACE(SettingValue, '\','\\'), '/', '\/') + '"'
+            +'}'
+
+        from UTILITY_AppSettings
+        for xml path(''), type
+    ).value('.', 'varchar(max)'), 1, 1, '') + ']'
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

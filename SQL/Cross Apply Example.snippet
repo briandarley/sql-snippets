@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Cross Apply Example</Title>
+                        <Shortcut></Shortcut>
+			<Description>Cross Apply Example</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+                                <Literal>
+                                	<ID>table_name</ID>
+                                	<ToolTip>tableName</ToolTip>
+                                	<Default></Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+
+with cte_result as (
+
+  select r.usermessageId id,
+  case 
+	when PendingEmployees = 1 then 'Pending Employees' end col1,
+    case when PendingStudents = 1 then 'Pending Students' end col2,
+	case when ApprovedEmployees =1 then 'Approved Employees' end col3,
+	case when ApprovedStudents =1 then 'Approved Students' end col4,
+	case when SentEmployees =1 then 'Sent to Employees' end col5,
+	case when SentStudents =1 then 'Sent to Students' end col6,
+	case when Canceled =1 then 'Canceled' end col7,
+	case when DeniedEmployees =1 then 'Denied Employees' end col8,
+	case when DeniedStudents =1 then 'Denied Students' end col9
+  from MessageStatus ms
+  join requests r on r.GuidMessageId = ms.GuidMessageId
+
+  where 1=1 
+    --and r.UserMessageId = 4355
+
+			)
+select id, 
+  indicatorvalue
+from cte_result
+cross apply
+(
+  select col1 union all
+  select col2 union all
+  select col3 union all
+  select col4 union all
+  select col5 union all
+  select col6 union all
+  select col7 union all
+  select col8 union all
+  select col9
+) c (indicatorvalue);
+
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

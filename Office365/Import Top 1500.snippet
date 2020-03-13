@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Import Top 1500</Title>
+                        <Shortcut></Shortcut>
+			<Description>Import Top 1500</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+<Declarations>
+                                <Literal>
+                                	<ID>messageId</ID>
+                                	<ToolTip>Message Id</ToolTip>
+                                	<Default></Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+  /*
+  Append top 1500 Students to MFAUsers 
+  */
+  insert into [ITS_WSAPP_O365MIGRATION].[dbo].[MfaUsers]
+  (uid, pid, displayName, mfaEnabled)
+
+  select top 1500 mfa.onyen, ldap.pid,mfa.displayname, case when mfa.status = 'Disabled' then 0 else 1 end 
+  from ITS_WSAPP_LIVEDU..MfaAccountStatus mfa
+  join ITS_WSAPP_MASSMAIL.massmail.LdapUser ldap on ldap.uid = mfa.onyen
+  left join [ITS_WSAPP_O365MIGRATION].[dbo].[MfaUsers] mfau on mfau.uid = ldap.uid
+  where 
+  1=1
+  and mfau.uid  is null
+  and ldap.student = 1
+  order by mfa.displayname
+
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

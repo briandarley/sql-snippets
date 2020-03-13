@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Add Code Value Lookup</Title>
+                        <Shortcut></Shortcut>
+			<Description>Add Code Value Lookup</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+<Declarations>
+                                <Literal>
+                                	<ID>Criteria</ID>
+                                	<ToolTip>Criteria</ToolTip>
+                                	<Default>SENDING_CRITERIA</Default>
+                                </Literal>
+								<Literal>
+                                	<ID>Code</ID>
+                                	<ToolTip>Code</ToolTip>
+                                	<Default></Default>
+                                </Literal>
+								<Literal>
+                                	<ID>Description</ID>
+                                	<ToolTip>Description</ToolTip>
+                                	<Default></Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+use ITS_WSAPP_MASSMAIL
+go
+
+insert into MassMail.CodeValueLookUp
+(scope, code, description)
+select 
+'$Criteria$',
+'$Code$',
+'$Description$'
+
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

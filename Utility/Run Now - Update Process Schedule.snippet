@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Run Now - Update Process Schedule</Title>
+                        <Shortcut></Shortcut>
+			<Description></Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+                                <Literal>
+                                	<ID>RoleName</ID>
+                                	<ToolTip>Name of the database role</ToolTip>
+                                	<Default>RoleName</Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+
+use [ITS_WSAPP_UTILITY]
+go  
+
+if OBJECT_ID('tempdb..#CurrentProcessSchedule') is not null
+begin 
+	drop table #CurrentProcessSchedule
+end 
+if OBJECT_ID('tempdb..#tmp') is not null
+begin 
+	drop table #tmp
+end 
+ 
+
+Create table #CurrentProcessSchedule
+(
+  Id int identity(1,1),
+  StartTime nvarchar(50),
+  ProcessId int 
+)
+
+insert into #CurrentProcessSchedule
+select ps.StartTime, ps.ProcessId 
+from Process p 
+join ProcessSchedule ps on ps.processid = p.id
+where 1=1
+and p.appdomain = 'MassMail'
+and p.queuename = 'MASS_MAIL_MAINT'
+--and p.id in (2,3,4,5,6,7)
+
+
+select * into #tmp from  #CurrentProcessSchedule
+
+declare @processId int
+declare @timeIncrement int
+
+set @timeIncrement = 1;
+
+/*******************************************************************************************
+Setting the start times of the processes to 2 minutes from now
+*******************************************************************************************/
+
+While(select count(*) from #tmp) > 0
+begin
+ select top 1 @processId = processId from #tmp
+ order by starttime;
+
+ set @timeIncrement = @timeIncrement + 1;
+
+ 
+ 
+ update ProcessSchedule
+ set StartTime = format(dateadd(minute, @timeIncrement,getdate()), 'h:mm tt') 
+ where processId = @processId;
+
+
+ delete from #tmp where processId = @processId;
+end
+
+/**************************************************************************************************************
+Reset everything back to where it was 
+***************************************************************************************************************/
+
+--Update ProcessSchedule
+--set StartTime = c.StartTime
+--from ProcessSchedule p
+--join #CurrentProcessSchedule c on p.processId = c.processId
+
+
+			
+select * from Process p
+join ProcessSchedule ps on p.id = ps.processId
+where 1=1
+and p.appdomain = 'MassMail'
+and p.queuename = 'MASS_MAIL_MAINT'		
+
+
+
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

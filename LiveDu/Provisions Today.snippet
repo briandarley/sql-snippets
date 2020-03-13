@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Provisions Today</Title>
+                        <Shortcut></Shortcut>
+			<Description>Provisions Today.</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+
+			<Code Language="SQL"><![CDATA[
+use ITS_WSAPP_LIVEDU
+go
+
+declare @days int;
+declare @status nvarchar(max);
+set @days  = 160;
+set @status  = 'Completed';
+
+SELECT * FROM [ITS_WSAPP_LIVEDU].[dbo].[LIVEDU_ProvisioningJobs]
+where 1=1
+and cast(submitteddate as date) >= cast((getdate() -@days) as date)
+and status != @status
+and status not in ('Rejected','Hold')
+
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

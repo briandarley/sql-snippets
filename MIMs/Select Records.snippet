@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Select User Records</Title>
+                        <Shortcut></Shortcut>
+			<Description>Select User Records</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>pid</ID>
+				<ToolTip>PID</ToolTip>
+				<Default></Default>
+			</Literal>
+			<Literal>
+				<ID>uid</ID>
+				<ToolTip>UID</ToolTip>
+				<Default></Default>
+			</Literal>
+			<Literal>
+				<ID>uid</ID>
+				<ToolTip>UID</ToolTip>
+				<Default>null</Default>
+			</Literal>
+		</Declarations>
+			
+			<Code Language="SQL"><![CDATA[
+use UnifiedGAL_Accounts
+go
+
+declare @pid int
+declare @uid nvarchar(max)
+declare @email nvarchar(max)
+
+
+--set @pid = $pid$
+--set @uid  = '$uid$'
+--set @email = $email$
+
+
+if(@uid is not null)
+begin
+	select @pid = pid from Accounts_DualRoleDesignations where uncmailnickname = @uid 
+end
+if(@email is not null)
+begin
+	select @pid = pid from Accounts_DualRoleDesignations where uncmail = @email 
+end
+
+
+select * from Accounts_DualRoleDesignations	   where pid = @pid
+select * from Accounts_Users_UNCCH			   where pid = @pid
+select * from Accounts_Users_UNCHCS            where pid = @pid
+select * from Accounts_Contacts_UNCHCS 		   where pid = @pid
+select * from Accounts_Contacts_UNCCH 		   where pid = @pid
+
+
+--delete from Accounts_DualRoleDesignations	   where pid = @pid
+--delete from Accounts_Users_UNCCH			   where pid = @pid
+--delete from Accounts_Users_UNCHCS            where pid = @pid
+--delete from Accounts_Contacts_UNCHCS 		   where pid = @pid
+--delete from Accounts_Contacts_UNCCH 		   where pid = @pid
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

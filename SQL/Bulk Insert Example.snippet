@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Bulk Insert Example</Title>
+                        <Shortcut></Shortcut>
+			<Description>Bulk Insert Example</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			
+			<Code Language="SQL"><![CDATA[
+--Sample to import from csv
+IF OBJECT_ID('tempdb..#users') IS NOT NULL DROP TABLE #users
+GO
+
+CREATE TABLE #users (
+  PID nvarchar(max),
+  FirstName nvarchar(max),  
+  LastName nvarchar(max),  
+  Onyen nvarchar(max),  
+  Email nvarchar(max)
+)
+
+BULK INSERT #users
+FROM 'c:\temp\email+2019.csv'
+WITH
+(
+  FIRSTROW = 1,
+  --DATAFILETYPE='native', -- UTF-16
+  FIELDTERMINATOR = ',',
+  ROWTERMINATOR = '\n'
+  --TABLOCK,
+  --KEEPNULLS -- Treat empty fields as NULLs.
+)
+select * from #users
+
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

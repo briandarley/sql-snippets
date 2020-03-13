@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>LdapQueryExamples</Title>
+                        <Shortcut></Shortcut>
+			<Description>LdapQuery Examples</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+                                <Literal>
+                                	<ID>onyen</ID>
+                                	<ToolTip>Onyen Of User</ToolTip>
+                                	<Default></Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+use master 
+go
+--This must be done on local as we need rights to create a linked server on any other production server
+
+--Setting up Linked Server on Local
+/*
+	--https://community.spiceworks.com/how_to/27494-create-a-sql-linked-server-to-adsi
+	EXEC sp_addlinkedserver @server = 'ADSI', @srvproduct = 'Active Directory Services 2.5', @provider = 'ADSDSOObject', @datasrc = 'adsdatasource'
+	
+	EXEC sp_addlinkedsrvlogin @rmtsrvname = 'ADSI', @useself = 'False', @locallogin = 'sa', @rmtuser = 'uid=ldapauth/its_workgroup_services,cn=accounts,dc=unc,dc=edu', @rmtpassword = '5*LAnegEL'
+	
+	sp_configure 'show advanced options', 1 
+	reconfigure with override
+	
+	sp_configure 'Ad Hoc Distributed Queries', 1 
+	reconfigure
+*/
+
+--Query Ldap for user with ID 
+SELECT * FROM OpenQuery(ADSI, 'SELECT * FROM ''LDAP://ldap.unc.edu:389/ou=people,DC=unc,DC=edu'' WHERE uid=''bdarley'' ')
+
+
+--1000 maximum records returned, although I had less success
+SELECT top 10 * FROM OpenQuery(ADSI, 'SELECT * FROM ''LDAP://ldap.unc.edu:389/DC=unc,DC=edu'' WHERE objectclass=''uncperson'' and edupersonaffiliation=''student'' ')
+
+
+
+--can't include userid,uid as it appears to be a multivalued property
+--ADSI returns you no more than 1000 records in single query, after that it will report a error
+--and ADSI can't handle multivalued attributes, querying a multivalued field will also fail.
+SELECT top 10 * FROM OpenQuery(ADSI, 'SELECT displayname,createtimestamp,modifyTimeStamp FROM ''LDAP://ldap.unc.edu:389/DC=unc,DC=edu'' WHERE objectclass=''uncperson'' and edupersonaffiliation=''student'' and uid = ''aa*'' ')
+
+
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
