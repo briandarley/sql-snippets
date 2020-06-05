@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Read From Excel File</Title>
+                        <Shortcut></Shortcut>
+			<Description>Using openrowset, open an Excel file and read into a temp table</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+			
+		</Header>
+		<Snippet>
+			<Declarations>
+                                <Literal>
+                                	<ID>fileName</ID>
+                                	<ToolTip>fileName full path</ToolTip>
+                                	<Default>C:\folder\simple.xlsx</Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+--This is probably better done using local SQL server
+--You may need to set SQL Server service to run under your own account in order to make this work
+
+/*
+--source : https://www.mssqltips.com/sqlservertip/6178/read-excel-file-in-sql-server-with-openrowset-or-opendatasource/
+--Exectute the below if this is the first time
+EXEC sp_configure 'show advanced option', '1';
+RECONFIGURE;
+EXEC sp_configure 'Ad Hoc Distributed Queries', 1;
+RECONFIGURE;
+
+EXEC master.[sys].[sp_MSset_oledb_prop] N'Microsoft.ACE.OLEDB.16.0', N'AllowInProcess', 1
+*/
+
+
+
+SELECT * into #tmp
+FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0',
+  'Excel 12.0 Xml;Database=$fileName$;', Sheet1$$); 
+
+
+
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
