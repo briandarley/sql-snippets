@@ -45,6 +45,8 @@ Select @JSON = @JSON+NewRow+JSON+EndRow
  From  cteBld 
 
 Select '['+Stuff(@JSON,1,1,'')+']'
+--for very long text that gets truncated...
+Select CAST('<A><![CDATA[' + CAST('['+Stuff(@JSON,1,1,'')+']' as nvarchar(max)) + ']]></A>' AS xml)
 
 			
 ]]>
