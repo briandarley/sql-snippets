@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Split Column List into Rows</Title>
+                        <Shortcut></Shortcut>
+			<Description>Split Column List into Rows</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			
+			<Code Language="SQL"><![CDATA[
+
+;WITH tmp(DataItem,departmentnumbers) AS
+(
+    SELECT
+        
+        LEFT(cast(departmentnumbers as varchar(max)), CHARINDEX(',', cast(departmentnumbers as varchar(max)) + ',') - 1),
+        STUFF(cast(departmentnumbers as varchar(max)), 1, CHARINDEX(',', cast(departmentnumbers as varchar(max)) + ','), '')
+    FROM massmail.ldapuser
+    UNION all
+
+    SELECT
+       
+        LEFT(cast(departmentnumbers as varchar(max)), CHARINDEX(',', cast(departmentnumbers as varchar(max)) + ',') - 1),
+        STUFF(cast(departmentnumbers as varchar(max)), 1, CHARINDEX(',', cast(departmentnumbers as varchar(max)) + ','), '')
+    FROM tmp
+    WHERE
+        departmentnumbers > ''
+)
+
+SELECT
+    DataItem as department
+	into #tmp
+FROM tmp
+
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
