@@ -34,6 +34,11 @@
 				<ToolTip>UID</ToolTip>
 				<Default>null</Default>
 			</Literal>
+			<Literal>
+				<ID>dcn</ID>
+				<ToolTip>dcn</ToolTip>
+				<Default>null</Default>
+			</Literal>
 		</Declarations>
 			
 			<Code Language="SQL"><![CDATA[
@@ -43,12 +48,12 @@ go
 declare @pid int
 declare @uid nvarchar(max)
 declare @email nvarchar(max)
-
+declare @dcn nvarchar(max)
 
 --set @pid = $pid$
 --set @uid  = '$uid$'
 --set @email = $email$
-
+--set @dcn  = $dcn$
 
 if(@uid is not null)
 begin
@@ -58,7 +63,17 @@ if(@email is not null)
 begin
 	select @pid = pid from Accounts_DualRoleDesignations where uncmail = @email 
 end
-
+if(@dcn is not null)
+begin
+	if exists (select * from Accounts_Contacts_UNCCH where unccontactdn = @dcn)
+	begin
+		select @pid = pid from Accounts_Contacts_UNCCH where unccontactdn = @dcn
+	end
+	if exists (select * from Accounts_Contacts_UNCHCS where unchcontactdn = @dcn)
+	begin
+		select @pid = pid from Accounts_Contacts_UNCHCS where unchcontactdn = @dcn
+	end
+end
 
 select * from Accounts_DualRoleDesignations	   where pid = @pid
 select * from Accounts_Users_UNCCH			   where pid = @pid
