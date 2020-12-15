@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Conver To SQL From Json</Title>
+                        <Shortcut></Shortcut>
+			<Description>Conver To SQL From Json</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+<Declarations>
+                                
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+
+
+declare @xml nvarchar(max);
+
+set @xml  = '<run-history>
+ <run-details>
+  ... XML Removed
+  </step-details>
+ </run-details>
+</run-history>'
+
+
+
+
+declare @idoc int
+exec sp_xml_preparedocument @idoc out, @xml, '<row xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>'
+
+
+
+
+select * from OPENXML (@idoc, '/run-history/run-details/step-details/synchronization-errors/import-error')
+with(
+  FirstOccurred varchar(100) 'first-occurred'
+  ,ErrorType nvarchar(255) 'error-type'
+  ,DN nvarchar(255) '@dn'
+  ,ExtensionName nvarchar(255) 'extension-error-info/extension-name'
+  ,CallStack nvarchar(max) 'extension-error-info/call-stack'
+)
+
+
+exec sp_xml_removedocument @idoc
+
+
+
+
+
+
+
+
+
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
