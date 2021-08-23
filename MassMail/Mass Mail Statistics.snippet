@@ -26,46 +26,26 @@
                                 </Literal>
 			</Declarations>
 			<Code Language="SQL"><![CDATA[
---Reviewers Kerrenda Crandol, Lori Saddler, Bob Blanchard, Jane Calloway, Kate Hash		
 use ITS_WSAPP_MASSMAIL
 go
-declare @messageId int;
-set @messageId  = 4412;
 
- 
-  select * from Requests
-  where usermessageid = @messageId;
-  -- Priority = 'Informational'
-  -- SponsoringOrganization = 'Biomedical Research Imaging Center'
+declare @campaignId int;
+set @campaignId  = $campaignId$;
 
-  SELECT * 
-  FROM [ITS_WSAPP_MASSMAIL].[dbo].[MessageStatus] ms with(nolock)
-  join requests r on r.GuidMessageId = ms.GuidMessageId
-  where r.UserMessageId = @messageId;
-  --LastAction = 'SentStudentsAndEmployees'
+select * from MassMail.Campaign where                 id = @campaignId;
+select * from MassMail.CampaignAction                 where campaignId = @campaignId 
+select * from MassMail.CampaignStatus				  where campaignId = @campaignId 
 
+--select * from MassMail.Recipient					  where campaignId = @campaignId 
+--select * from MassMail.CampaignContent				  where campaignId = @campaignId 
+--select * from MassMail.CampaignComment				  where campaignId = @campaignId 
+--select * from MassMail.CampaignActivity				  where campaignId = @campaignId 
 
-  select count(*) from Recipients with(nolock)
-  where MessageId = @messageId
-  --Note, if the mass mail was sent out as informational it will not be sent to 
-  --users with massmail flag = 'N'
-  -- LDAPFilter = "(&(objectclass=UNCPerson)(edupersonaffiliation=student)(massemailallowed=Y))";
-  --9117 Recipients
-
-  select top 10 * from Recipients with(nolock)
-  where MessageId = @messageId
-
-select top 10 * from SendingCriteria sc with(nolock)  
-join requests r on r.GuidMessageId = sc.GuidMessageId
-  where r.UserMessageId = @messageId;
-  
-
-
--- select * from MessageAction m
---   join requests r on r.GuidMessageId = m.GuidMessageId
---   where r.UserMessageId = @messageId
---   order by m.ExecutionDate asc;
-
+--select * from MassMail.VwDeliveryReport where campaignId = @campaignId 
+--select * from MassMail.VwCampaignStatusPopulation where campaignId = @campaignId 
+--select * from MassMail.VwCampaignAudienceCount2 
+--select * from MassMail.VwCampaignReadStatistics where campaignId = @campaignId 
+--select top 10 * from MassMail.VwCampaignAudience2
 
 ]]>
 			</Code>
