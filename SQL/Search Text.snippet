@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Search Text</Title>
+                        <Shortcut></Shortcut>
+			<Description>Search stored procedures, functions, triggers for text</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+                                <Literal>
+                                	<ID>searchText</ID>
+                                	<ToolTip>searchText</ToolTip>
+                                	<Default>search text</Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+
+
+DECLARE @Search varchar(255)
+SET @Search='$searchText$'
+
+SELECT DISTINCT
+    o.name AS Object_Name,o.type_desc
+    FROM sys.sql_modules        m 
+        INNER JOIN sys.objects  o ON m.object_id=o.object_id
+    WHERE m.definition Like '%'+@Search+'%'
+    ORDER BY 2,1
+
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

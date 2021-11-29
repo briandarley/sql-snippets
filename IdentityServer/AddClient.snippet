@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>AddClient</Title>
+                        <Shortcut></Shortcut>
+			<Description>Add Client Examples</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+                                <Literal>
+                                	<ID>onyen</ID>
+                                	<ToolTip>Onyen Of User</ToolTip>
+                                	<Default></Default>
+                                </Literal>
+			</Declarations>
+			<Code Language="SQL"><![CDATA[
+insert into Clients 
+(
+Enabled
+,ClientId
+,ProtocolType
+,RequireClientSecret
+,ClientName
+,Description
+,ClientUri
+,LogoUri
+,RequireConsent
+,AllowRememberConsent
+,AlwaysIncludeUserClaimsInIdToken
+,RequirePkce
+,AllowPlainTextPkce
+,RequireRequestObject
+,AllowAccessTokensViaBrowser
+,FrontChannelLogoutUri
+,FrontChannelLogoutSessionRequired
+,BackChannelLogoutUri
+,BackChannelLogoutSessionRequired
+,AllowOfflineAccess
+,IdentityTokenLifetime
+,AllowedIdentityTokenSigningAlgorithms
+,AccessTokenLifetime
+,AuthorizationCodeLifetime
+,ConsentLifetime
+,AbsoluteRefreshTokenLifetime
+,SlidingRefreshTokenLifetime
+,RefreshTokenUsage
+,UpdateAccessTokenClaimsOnRefresh
+,RefreshTokenExpiration
+,AccessTokenType
+,EnableLocalLogin
+,IncludeJwtId
+,AlwaysSendClientClaims
+,ClientClaimsPrefix
+,PairWiseSubjectSalt
+,Created
+,Updated
+,LastAccessed
+,UserSsoLifetime
+,UserCodeType
+,DeviceCodeLifetime
+,NonEditable)
+
+
+select
+1 Enabled
+,'mvc' ClientId
+, 'oidc' ProtocolType
+,1 RequireClientSecret --default true
+,'mvc test' ClientName
+,null Description
+,null ClientUri --this is used on the consent screen
+,null LogoUri  --this is used on the consent screen
+,0 RequireConsent
+,0 AllowRememberConsent --
+,0 AlwaysIncludeUserClaimsInIdToken --user userinfo to retrieve claims
+,1 RequirePkce --default true
+,0 AllowPlainTextPkce --default false
+,0 RequireRequestObject
+,0 AllowAccessTokensViaBrowser
+,null FrontChannelLogoutUri
+,0 FrontChannelLogoutSessionRequired
+,null BackChannelLogoutUri
+,0 BackChannelLogoutSessionRequired
+, 0 AllowOfflineAccess
+, 300 IdentityTokenLifetime
+, null AllowedIdentityTokenSigningAlgorithms
+,3600 AccessTokenLifetime
+, 300 AuthorizationCodeLifetime
+, null ConsentLifetime
+,2492000 AbsoluteRefreshTokenLifetime --30 days
+,1296000 SlidingRefreshTokenLifetime --15 days
+,0 RefreshTokenUsage
+, 0 UpdateAccessTokenClaimsOnRefresh
+, 1 RefreshTokenExpiration
+, 0 AccessTokenType -- 'Jwt' 
+, 1 EnableLocalLogin
+, 0 IncludeJwtId
+, 0 AlwaysSendClientClaims
+, 'client_' ClientClaimsPrefix
+, null PairWiseSubjectSalt
+, GetDate() Created
+, GetDate() Updated
+, GetDate() LastAccessed
+, null UserSsoLifetime
+, null UserCodeType
+, 0 DeviceCodeLifetime
+,0 NonEditable;
+
+
+
+
+insert into ClientRedirectUris 
+select 'https://its-idmtst-web.adtest.unc.edu/client/self-service/signin-oidc',5
+
+insert into ClientPostLogoutRedirectUris
+select 'https://its-idmtst-web.adtest.unc.edu/client/self-service/signout-callback-oidc', 5
+
+insert into ClientSecrets 
+select 5, 'secret', 'K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=', null, 'SharedSecret', getdate()
+
+insert into ClientGrantTypes 
+select 'authorization_code', 5
+
+insert into clientscopes
+select * from (values
+	 ('openid',5)
+	,('profile',5)
+	,('self-service-business',5)
+)
+as x(scope, clientid)
+			
+			
+
+			
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

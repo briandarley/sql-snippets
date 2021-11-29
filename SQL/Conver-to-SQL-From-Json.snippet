@@ -46,6 +46,17 @@ WITH (
 ) 
 
 
+/*
+select ',' +  c.name + ' ' + typ.name +
+case when typ.name = 'nvarchar' then '(' + cast(c.max_length  as nvarchar) + ')' 
+else '' 
+end + ' ''$.' + c.name + ''''
+ 
+ from sys.tables t
+join sys.columns c on c.object_id = t.object_id
+JOIN sys.types Typ ON TYP.user_type_id = c.user_type_id
+where t.name = 'IdentityResourceClaims'
+*/
 
 ]]>
 			</Code>
