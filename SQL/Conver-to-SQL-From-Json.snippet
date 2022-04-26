@@ -55,6 +55,8 @@ WITH (
 
 
 
+/*
+
 
 select ',' + 
 column_name
@@ -66,8 +68,28 @@ case when data_type = 'nvarchar' then 'nvarchar('    + cast(character_maximum_le
 
 from INFORMATION_SCHEMA.COLUMNS where table_name = '$table$'
 
- 
 
+
+
+select ',' + c.name from sys.columns c
+join sys.tables t on t.object_id = c.object_id
+where t.name = '$table$'
+
+insert into $table$ 
+(
+-- columns
+)
+SELECT -- columns
+
+FROM OPENJSON(@json)
+WITH (   
+--    primarySmtpAddress   varchar(200) '$$.primarySmtpAddress' ,  
+--    alias     varchar(20)     '$$.alias'
+) 
+
+
+ 
+*/
 
 ]]>
 			</Code>
