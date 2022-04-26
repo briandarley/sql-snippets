@@ -57,7 +57,7 @@ WITH (
 
 /*
 
-
+--retrieve JSON columns 
 select ',' + 
 column_name
 + ' ' + 
@@ -70,10 +70,12 @@ from INFORMATION_SCHEMA.COLUMNS where table_name = '$table$'
 
 
 
-
+--Retrieve Table Colunn Names
 select ',' + c.name from sys.columns c
 join sys.tables t on t.object_id = c.object_id
 where t.name = '$table$'
+
+set identity_insert $table$ on
 
 insert into $table$ 
 (
@@ -88,7 +90,7 @@ WITH (
 ) 
 
 
- 
+set identity_insert $table$ off 
 */
 
 ]]>
