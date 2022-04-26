@@ -17,11 +17,11 @@
 				<SnippetType>Expansion</SnippetType>
 			</SnippetTypes>
 			<Declarations>
-                                <Literal>
-                                	<ID>table</ID>
-                                	<ToolTip>table</ToolTip>
-                                	<Default>table</Default>
-                                </Literal>
+				<Literal>
+					<ID>table</ID>
+					<ToolTip>table</ToolTip>
+					<Default>table</Default>
+				</Literal>
 			</Declarations>
 		</Header>
 		<Snippet>
@@ -58,14 +58,14 @@ WITH (
 select ',' + 
 column_name
 + ' ' + 
-case when data_type = 'nvarchar' then 'nvarchar('    + cast(character_maximum_length as nvarchar(max)) + ') ''$.' + column_name + ''''
-     when data_type = 'varchar' then 'varchar('		 + cast(character_maximum_length as nvarchar(max)) + ') ''$.' + column_name + ''''
-	 when data_type = 'datetime2' then 'datetime2('	 + cast(Datetime_precision as nvarchar(max))       + ') ''$.' + column_name + ''''
-	 else data_type + '''$.' + column_name + '''' end                                                                               
+case when data_type = 'nvarchar' then 'nvarchar('    + cast(character_maximum_length as nvarchar(max)) + ') ''$$.' + column_name + ''''
+     when data_type = 'varchar' then 'varchar('		 + cast(character_maximum_length as nvarchar(max)) + ') ''$$.' + column_name + ''''
+	 when data_type = 'datetime2' then 'datetime2('	 + cast(Datetime_precision as nvarchar(max))       + ') ''$$.' + column_name + ''''
+	 else data_type + '''$$.' + column_name + '''' end                                                                               
 
-from INFORMATION_SCHEMA.COLUMNS where table_name = 'ApiResources'
+from INFORMATION_SCHEMA.COLUMNS where table_name = '$table$'
 
-
+ 
 */
 
 ]]>
