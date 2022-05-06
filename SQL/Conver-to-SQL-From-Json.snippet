@@ -16,18 +16,19 @@
 			<SnippetTypes>
 				<SnippetType>Expansion</SnippetType>
 			</SnippetTypes>
-			<Declarations>
+			
+		</Header>
+		
+		<Snippet>
+<Declarations>
 				<Literal>
 					<ID>table</ID>
 					<ToolTip>table</ToolTip>
 					<Default>table</Default>
 				</Literal>
 			</Declarations>
-		</Header>
-		<Snippet>
-<Declarations>
-                                
-			</Declarations>
+			
+			
 			<Code Language="SQL"><![CDATA[
 --ALTER DATABASE ITS_WSAPP_MASSMAIL SET COMPATIBILITY_LEVEL = 130
 DECLARE @json NVARCHAR(MAX)
@@ -53,8 +54,10 @@ WITH (
 ) 
 
 
+
 /*
 
+--retrieve JSON columns 
 select ',' + 
 column_name
 + ' ' + 
@@ -65,7 +68,29 @@ case when data_type = 'nvarchar' then 'nvarchar('    + cast(character_maximum_le
 
 from INFORMATION_SCHEMA.COLUMNS where table_name = '$table$'
 
- 
+
+
+--Retrieve Table Colunn Names
+select ',' + c.name from sys.columns c
+join sys.tables t on t.object_id = c.object_id
+where t.name = '$table$'
+
+set identity_insert $table$ on
+
+insert into $table$ 
+(
+-- columns
+)
+SELECT -- columns
+
+FROM OPENJSON(@json)
+WITH (   
+--    primarySmtpAddress   varchar(200) '$$.primarySmtpAddress' ,  
+--    alias     varchar(20)     '$$.alias'
+) 
+
+
+set identity_insert $table$ off 
 */
 
 ]]>
