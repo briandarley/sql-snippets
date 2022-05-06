@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Retrieve Audience</Title>
+                        <Shortcut></Shortcut>
+			<Description>Retrieve Audience</Description>
+			<Author>Brian Darley</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>campaignId</ID>
+				<ToolTip>Campaign Id</ToolTip>
+				<Default>1234</Default>
+			</Literal>
+			<Literal>
+				<ID>uid</ID>
+				<ToolTip>Uid</ToolTip>
+				<Default>onyen</Default>
+			</Literal>
+		</Declarations>
+			<Code Language="SQL"><![CDATA[
+/*
+Notes: remove the leading '-' from parameters you wish to include
+Parameter 
+massMailAllowed, false = MassMailFlag false
+massMailAllowed, true = MassMailFlag true
+
+*/			
+use ITS_WSAPP_MASSMAIL
+go
+
+use ITS_WSAPP_MASSMAIL
+go
+
+declare @rawQuery nvarchar(max);
+
+set @rawQuery = '{
+ "massMailAllowed":false
+,"-campaignId":$campaignId$
+,"-uid":"$uid$"
+,"uniqueRecipientsOnly":false
+,"pageSize":10
+,"index":0
+,"sort":"Pid"
+,"listSortDirection":1
+,"-includePopulationsCodes":["GRADUATES"]
+,"-excludePopulationsCodes":["CONSULTANTS"]
+,"-departmentNumbers":["100", "101","102"]}';
+
+exec [spGetAudienceList2] @rawQuery
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
