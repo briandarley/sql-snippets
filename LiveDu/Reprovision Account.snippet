@@ -27,16 +27,25 @@
 			</Declarations>
 			<Code Language="SQL"><![CDATA[
 
-/*
-Reprovision Office 365 Accounts that have been deactivated. 
-*/
 
-select *  FROM ITS_WSAPP_LIVEDU.dbo.LIVEDU_ProvisioningJobs (nolock)  where onyen = '$onyen$'; 
+use ITS_WSAPP_LIVEDU
+go
+
+declare @Id int
+SELECT top 100 * into #tmp FROM [ITS_WSAPP_LIVEDU].[dbo].[LIVEDU_ProvisioningJobs]
+where 1=1
+and status not in ('completed', 'failed')
+order by id desc;
+
+--while(exists(select * from #tmp ))
+--begin
+--select top 1 @Id  = id from #tmp
+--update [ITS_WSAPP_LIVEDU].[dbo].[LIVEDU_ProvisioningJobs] set status = 'Submitted' where id = @id
+--delete from #tmp where id = @id
+--end
 
 
---remedy 3619210
-update [ITS_WSAPP_LIVEDU].[dbo].[LIVEDU_ProvisioningJobs] set onyen = concat(onyen, '-stop') where onyen = '$onyen$'; 
-			
+
 ]]>
 			</Code>
 		</Snippet>
